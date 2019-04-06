@@ -8,11 +8,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderCustomerController extends AbstractController
 {
     /**
-     * @Route("/order/customer", name="order_customer")
+     * @Route("/commande", name="order")
+     * @Route("/", name="order_main")
+     * 
      */
     public function index()
     {
-        return $this->render('order_customer/index.html.twig', [
+        return $this->render('order_customer/order_customer.html.twig', [
             'controller_name' => 'OrderCustomerController',
         ]);
     }

@@ -8,11 +8,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class CustomerController extends AbstractController
 {
     /**
-     * @Route("/customer", name="customer")
+     * @Route("/visiteurs", name="customer")
      */
     public function index()
     {
-        return $this->render('customer/index.html.twig', [
+        return $this->render('customer/customer.html.twig', [
             'controller_name' => 'CustomerController',
         ]);
     }

@@ -1,12 +1,44 @@
 <!DOCTYPE html>
+<html lang="fr">
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+    
+        {% include 'common/head.html.twig' %}
+
     </head>
     <body>
-        {% block body %}{% endblock %}
+
+        {% include 'common/navbar.html.twig' %}
+        
+        <div class="container mt-3">
+            {% include 'common/header.html.twig' %}
+            <hr class="my-4">
+            {% block body %}{% endblock %}
+        </div>
+        
+
+        <script src='/js/jquery.min.js'></script>
+        <script src='/js/popper.min.js'></script>
+        <script src='/js/bootstrap.min.js'></script>
+        <script src="/js/bootstrap-datepicker.min.js"></script>
+
+        <script>
+            (function($){
+                $.fn.datepicker.dates['fr'] = {
+                    days: ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"],
+                    daysShort: ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."],
+                    daysMin: ["di", "lu", "ma", "me", "je", "ve", "sa"],
+                    months: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
+                    monthsShort: ["janv.", "févr.", "mars", "avril", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."],
+                    today: "Aujourd'hui",
+                    monthsTitle: "Mois",
+                    clear: "Effacer",
+                    weekStart: 1,
+                    format: "dd/mm/yyyy"
+                };
+            }(jQuery));
+        </script>
+
         {% block javascripts %}{% endblock %}
     </body>
 </html>

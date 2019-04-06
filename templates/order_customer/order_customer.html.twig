@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+
+<h1>Commande</h1>
+
+<hr class="my-4">
+
+<div class="container mt-3">
+
+{# {{ form_start(form) }}
+
+{{ form_widget(form) }}
+
+<button type="submit" class="btn btn-info my-3">Passer à l'étape suivante</button>
+
+{{ form_end(form) }} #}
+
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script>
+    
+    {# var dates = ['01/05/yyyy', '01/11/yyyy', '25/12/yyyy'];
+    var year = [2019, 2020];
+
+    var data= year[1].toString();
+    var result = [data];
+
+    var date1 = dates[0].replace('yyyy', result[0]);
+    var date2 = dates[1].replace('yyyy', result[0]);
+    var date3 = dates[2].replace('yyyy', result[0]);
+    var allDates = [date1, date2, date3];
+    console.log(allDates);
+
+    var datesDisabled = allDates; #}
+    //console.log(datesDisabled);
+
+    var datesDisabled = ['01/05/2019', '01/11/2019', '25/12/2019'];
+    
+    $('#order_dateOfVisit').datepicker({
+        format: 'dd/mm/yyyy',
+        daysOfWeekDisabled: [2, 0],
+        datesDisabled: datesDisabled,
+        startDate: new Date(),
+        language: 'fr',
+        autoclose: true,
+        todayHighlight: true,
+    });
+
+</script>
+        
+{% endblock %}
