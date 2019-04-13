@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cee4085fe3fa88057621162b3c43239f",
+    "content-hash": "4bbfe33036581fc4690a8430c66113df",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2014,6 +2014,52 @@
                 "controllers"
             ],
             "time": "2018-12-11T16:59:23+00:00"
+        },
+        {
+            "name": "sllh/doctrine-dbal-utc-datetime",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Soullivaneuh/doctrine-dbal-utc-datetime.git",
+                "reference": "7fabe34e104b62f46b9f9582faa178c109c29dd6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Soullivaneuh/doctrine-dbal-utc-datetime/zipball/7fabe34e104b62f46b9f9582faa178c109c29dd6",
+                "reference": "7fabe34e104b62f46b9f9582faa178c109c29dd6",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^2.6",
+                "php": "^7.1"
+            },
+            "suggest": {
+                "doctrine/doctrine-bundle": "For Symfony integration of the DBAL type"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SLLH\\Doctrine\\DBAL\\Types\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sullivan SENECHAL",
+                    "email": "soullivaneuh@gmail.com"
+                }
+            ],
+            "description": "UTC DateTime type for Doctrine DBAL",
+            "keywords": [
+                "datetime",
+                "dbal",
+                "doctrine",
+                "utc"
+            ],
+            "time": "2017-09-25T19:52:09+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

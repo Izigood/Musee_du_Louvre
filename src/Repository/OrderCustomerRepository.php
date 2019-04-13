@@ -19,6 +19,32 @@ class OrderCustomerRepository extends ServiceEntityRepository
         parent::__construct($registry, OrderCustomer::class);
     }
 
+    /**
+    * @return OrderCustomer[] Returns an array of OrderCustomer objects
+    */
+    
+    public function findAllTicketsByDateOfVisit($visit)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('SUM(p.numberOfTickets)')
+            ->where('p.dateOfVisit = :val')
+            ->setParameter('val', $visit)
+            ->getQuery()
+            ->getSingleScalarResult();
+        ;
+    }
+    
+    public function findAllTicketsById($id)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('SUM(p.numberOfTickets)')
+            ->where('p.id = :val')
+            ->setParameter('val', $id)
+            ->getQuery()
+            ->getSingleScalarResult();
+        ;
+    }
+
     // /**
     //  * @return OrderCustomer[] Returns an array of OrderCustomer objects
     //  */

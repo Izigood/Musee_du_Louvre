@@ -10,13 +10,13 @@
 
 <div class="container mt-3">
 
-{# {{ form_start(form) }}
+{{ form_start(form) }}
 
 {{ form_widget(form) }}
 
 <button type="submit" class="btn btn-info my-3">Passer à l'étape suivante</button>
 
-{{ form_end(form) }} #}
+{{ form_end(form) }}
 
 </div>
 
@@ -43,7 +43,7 @@
 
     var datesDisabled = ['01/05/2019', '01/11/2019', '25/12/2019'];
     
-    $('#order_dateOfVisit').datepicker({
+    $('#order_customer_dateOfVisit').datepicker({
         format: 'dd/mm/yyyy',
         daysOfWeekDisabled: [2, 0],
         datesDisabled: datesDisabled,
@@ -51,6 +51,7 @@
         language: 'fr',
         autoclose: true,
         todayHighlight: true,
+        useLocalTimeZone: true,
     });
 
 </script>

@@ -147,6 +147,9 @@
             "config/packages/sensio_framework_extra.yaml"
         ]
     },
+    "sllh/doctrine-dbal-utc-datetime": {
+        "version": "v1.0.0"
+    },
     "swiftmailer/swiftmailer": {
         "version": "v6.2.0"
     },
