@@ -6,6 +6,7 @@ use App\Entity\Customer;
 use App\Form\CustomerType;
 use App\Entity\OrderCustomer;
 use App\Repository\CustomerRepository;
+use App\Repository\OrderCustomerRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,24 +16,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class CustomerController extends AbstractController
 {
     /**
-     * @Route("/visiteurs/id={id}/nbre-tickets={ticketsId}", name="customer")
+     * @Route("/visiteurs/id={id}", name="customer")
      * 
      * @return Response
      */
-    public function index(Request $request, ObjectManager $manager, CustomerRepository $repo, $id)
+    public function index(Request $request, ObjectManager $manager, OrderCustomerRepository $repo, $id)
     {
+        $order = $repo->find($id);
+        $numberOfTickets = $order->getNumberOfTickets();
+        $lastnameFirst = $order->getLastname();
+        $firstnameFirst = $order->getFirstname();
+  
         
-        $order = new OrderCustomer;
-        // $id = $order->getId();
-        // dump($id);
-        dump($order);
-        
-        
-
-        // $ticketsId = $repoOrder->findAllTicketsById($id);
-        // $ticketsId = intval($ticketsPerId);
-        // dump($ticketsId);
-
         $customer = new Customer();
         
         $form = $this->createForm(CustomerType::class, $customer);
@@ -43,31 +38,48 @@ class CustomerController extends AbstractController
         {
             //$format = new \DateTime(date('m/d/Y'), new \DateTimeZone('Europe/Paris'));
             
+            $orderId = $customer->setOrderCustomer($order);
+            dump($numberOfTickets);
+            // $orderCustomer = $customer->setOrderCustomer($idOrder);
+            // $orderCustomer = $customer->getOrderCustomer();
+            // dump($orderCustomer);
+            
             $dateOfBirthday = $customer->getDateOfBirthday();
             $birthday = $dateOfBirthday->setTime('00','00','00');
             dump($birthday);
 
-            $customer->setTicketPrice(24);
+            $customer->setTicketPrice(24); // A modifier
             $price = $customer->getTicketPrice();
             dump($price);
        
 
-            // ;
+            $manager->persist($customer);
+            $manager->flush();
 
-            // $customer->setOrderCustomer(298);
-            // $orderCustomer = $customer->getOrderCustomer();
-            // dump($orderCustomer);
+            $id = $order->getId();
 
-            //dump($customer);
+            dump($customer);
 
-            // $manager->persist($customer);
-            // $manager->flush();
+            // for($i = 0; $i <= ($numberOfTickets - 1); $i++)
+            // {
+            //     $ticket = $i+1;
+            //     dump($ticket);
+            // }
 
-            //return $this->redirectToRoute('customer');
+
+            // return $this->redirectToRoute('customer',[
+            //     'id'                => $id,
+            //     // 'numberOfTickets'   => $numberOfTickets,
+            //     // 'firstname'         => $firstnameFirst,
+            //     // 'lastname'          => $lastnameFirst
+            // ]);
         }
 
         return $this->render('customer/customer.html.twig', [
-            'form' => $form->createView()
+            'form'              => $form->createView(),
+            'numberOfTickets'   => $numberOfTickets,
+            'firstname'         => $firstnameFirst,
+            'lastname'          => $lastnameFirst
         ]);
     }
 }

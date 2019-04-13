@@ -40,18 +40,14 @@ class OrderCustomerController extends AbstractController
             $order->setTotalPrice(12.00); // A modifier
 
             $halfDay = $order->getHalfDay();
-      
+        
             $dateOfVisit = $order->getDateOfVisit();
             $visit = $dateOfVisit->setTime('00','00','00');
 
             $tickets = $repo->findAllTicketsByDateOfVisit($visit);
-            dump($tickets);
-            $total = intval($order->getNumberOfTickets());
-            dump($total);
             $tickets = intval($tickets);
-            dump($tickets);
+            $total = intval($order->getNumberOfTickets());
             $totalTickets = $tickets + $total;
-            dump($totalTickets);
  
             if($totalTickets <= 1000)
             {
@@ -94,19 +90,16 @@ class OrderCustomerController extends AbstractController
             $manager->flush();
 
             $id = $order->getId();
-            $ticketsId = $repo->findAllTicketsById($id);
-            $ticketsId = intval($ticketsId);
-            
+
+            $this->addFlash(
+                'success',
+                "Vos billets sont réservés"
+            );
         
             return $this->redirectToRoute('customer', [
-                'id'        => $id,
-                'ticketsId' => $ticketsId
+                'id'        => $id
             ]);
         }
-
-        
-   
-        
 
         return $this->render('order_customer/order_customer.html.twig', [
             'form'  => $form->createView(),
