@@ -21,11 +21,13 @@ class OrderCustomer
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez saisir votre prénom !")
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez saisir votre nom !")
      */
     private $lastname;
 

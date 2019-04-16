@@ -4,17 +4,15 @@
 
 {% block body %}
 
-{% for label, messages in app.flashes %}
-    <div class="container">
-        <div class="alert alert-success">
-            {% for message in messages %}
-            <p>{{ message }}</p>
-            {% endfor %}
+{% for label, messages in app.flashes(['success', 'danger']) %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
         </div>
-    </div>
+    {% endfor %}
 {% endfor %}
 
-<h1>Visiteur 1 / {{ numberOfTickets }}</h1>
+<h1>Visiteur {{ ticket }} / {{ numberOfTickets }}</h1>
 
 <hr class="my-4">
 
@@ -24,14 +22,24 @@
 
     {{ form_widget(form) }}
 
-    <button type="#" class="btn btn-info my-3">Visiteur suivant</button>
+    {# <button type="submit" class="btn btn-info my-3" name="ticket" value="1">Visiteur suivant</button>
 
-    <button type="submit" class="btn btn-success my-3">Terminer la commande</button>
+    <button type="submit" class="btn btn-warning my-3" name="return" value="return">Retour à la commande</button> #}
+
+    {# <button type="submit" class="btn btn-info my-3">Visiteur suivant</button> #}
+
+    {% if ticket < numberOfTickets %}
+        <button type="submit" class="btn btn-info my-3">Visiteur suivant</button>
+    {% endif %}
+
+    {% if ticket == numberOfTickets %}
+        <button type="#" class="btn btn-success my-3">Terminer la commande</button>
+    {% endif %}
 
     {{ form_end(form) }}
 
     <div class='response my-3 text-warning' style='display: none'>
-        <p><em>\"Il sera nécessaire de présenter votre carte étudiant, militaire ou équivalent lors de votre entrée au musée !\"</em></p>
+        <p><em>Il sera nécessaire de présenter votre carte étudiant, militaire ou équivalent lors de votre entrée au musée !</em></p>
     </div>
 
 </div>
@@ -43,6 +51,7 @@
 <script>
     $('#customer_dateOfBirthday').datepicker({
         format: 'dd/mm/yyyy',
+        endDate: new Date(),
         language: 'fr',
         autoclose: true,
         todayHighlight: true

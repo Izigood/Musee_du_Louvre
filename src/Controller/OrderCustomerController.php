@@ -5,7 +5,10 @@ namespace App\Controller;
 use DateTime;
 use DateInterval;
 use DateTimeZone;
+use App\Service\PricesService;
+use App\Entity\Customer;
 use App\Entity\OrderCustomer;
+use App\Form\UserCustomerType;
 use App\Form\OrderCustomerType;
 use App\Repository\OrderCustomerRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,76 +36,140 @@ class OrderCustomerController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             
-            $format = new \DateTime(date('m/d/Y'), new \DateTimeZone('Europe/Paris'));
+            $format         = new \DateTime(date('m/d/Y'), new \DateTimeZone('Europe/Paris'));
 
-            $order->setDateOfOrder($format);
-            $order->setOrderStatus('En cours'); // A modifier
-            $order->setTotalPrice(12.00); // A modifier
+            $order          ->setDateOfOrder($format)
+                            ->setOrderStatus('En cours') // A modifier
+                            ->setTotalPrice(12.00); // A modifier                
 
-            $halfDay = $order->getHalfDay();
-        
-            $dateOfVisit = $order->getDateOfVisit();
-            $visit = $dateOfVisit->setTime('00','00','00');
+            $dateOfVisit    = $order->getDateOfVisit()->setTime('00','00','00');
+            $tickets        = intval($repo->findAllTicketsByDateOfVisit($dateOfVisit));
+            $total          = intval($order->getNumberOfTickets());
+            $totalTickets   = $tickets + $total;
 
-            $tickets = $repo->findAllTicketsByDateOfVisit($visit);
-            $tickets = intval($tickets);
-            $total = intval($order->getNumberOfTickets());
-            $totalTickets = $tickets + $total;
- 
-            if($totalTickets <= 1000)
+            switch ($totalTickets)
             {
-                $rest = 1000 - $totalTickets;
-                $mot = "Nous pouvons vous proposer ". $rest ." billets de disponibles"; // A modifier
-      
+                case ($totalTickets > 1000):
+                    return $this->redirectToRoute('order', [
+                        $this->addFlash(
+                            'warning',
+                            "Désolé, il n'est plus possible de commander de billets"
+                        )
+                    ]);
+                    break;
             }
 
-            if($totalTickets > 1000)
-            {
-                $mot = "Oups, il n'est plus possible de commander de billets"; //A modifier
-                //return $this->redirectToRoute('order');
-            }
+            // if($totalTickets <= 1000)
+            // {
+            //     $rest = 1000 - $totalTickets;
+            //     $message = "Nous pouvons vous proposer ". $rest ." billets de disponibles"; // A modifier
+            // }
 
-            $dateOfDay = $format;
+            // $halfDay = $order->getHalfDay();
+            // $dateOfDay = $format;
             
-            $gap = $visit->diff($dateOfDay);
+            $timeGap = $dateOfVisit->diff($format);
             $startDate = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
             $interval = new DateInterval('P1D');
-
-            if($gap == $interval)
+            
+            if($timeGap == $interval)
             {
                 $info = $startDate->format('H');
 
-                if($info >= 18 )
-                {
-                    $mot1 = "Désolé, mais il est trop tard pour commander aujourd'hui !";
-                    //return $this->redirectToRoute('order');
-                    dump($mot1);
-                }
-
+                // if($info >= 18 )
+                // {
+                //     $this->addFlash(
+                //         'danger',
+                //         "Oups, il est trop tard pour commander aujourd'hui !"
+                //     );
+                //     return $this->redirectToRoute('order');
+                //     die;
+                // }
                 if($info >= 14)
                 {
                     $halfDay = $order->setHalfDay(true);
-                    //indiquer un message
+                    $this->addFlash(
+                        'success',
+                        "Billet(s) commandé(s) pour la demi-journée !"
+                    );
+                }
+                else
+                {
+                    $halfDay = false; //A vérifier
                 }
             }
-
             $manager->persist($order);
-            $manager->flush();
+        }
 
-            $id = $order->getId();
+        $customer = new Customer();
+        
+        $formCustomer = $this->createForm(UserCustomerType::class, $customer);
+
+        $formCustomer->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $customer   ->setOrderCustomer($order)
+                        ->setFirstname($order->getFirstname())
+                        ->setLastname($order->getLastname())
+                        ->setTicketPrice(24) //A modifier
+                        ->getDateOfBirthday()->setTime('00','00','00');
+
+            $manager->persist($customer);
 
             $this->addFlash(
                 'success',
-                "Vos billets sont réservés"
+                "Vos billets sont réservés, vous pouvez poursuivre votre commande !"
             );
+        }
+        $manager->flush();
+
+        // $reduced = $customer->getReducedPrice();
         
+        // $age = 5;
+        // $halfDay = $order->getHalfDay();
+        
+
+        // $price = new PricesService;
+        // $prices = $price->definePrice($age, $halfDay, $reduced);
+        
+
+        
+        // dump($age);
+        // dump($halfDay);
+        // dump($reduced);
+        // dump($prices);
+
+
+
+
+        // dump($customer);
+
+        // dump($total);
+
+        // if($total <= 1)
+        // {
+        //     $info = "Commande immédiate"; //A modifier
+        //     dump($info);
+
+        //     return $this->redirectToRoute('order');
+        //     die;
+        // }
+        // else
+        // {   
+            $id = $order->getId();
+            dump($id);
+
             return $this->redirectToRoute('customer', [
                 'id'        => $id
             ]);
-        }
+        // }
+        
 
         return $this->render('order_customer/order_customer.html.twig', [
-            'form'  => $form->createView(),
+            'form'          => $form->createView(),
+            'formCustomer'  => $formCustomer->createView()
+            // 'total'         => $total
         ]);
     }
 }

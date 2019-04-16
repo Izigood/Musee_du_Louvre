@@ -4,19 +4,55 @@
 
 {% block body %}
 
+{% for label, messages in app.flashes(['success', 'danger']) %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
 <h1>Commande</h1>
 
 <hr class="my-4">
 
 <div class="container mt-3">
 
-{{ form_start(form) }}
+    {{ form_start(form) }}
 
-{{ form_widget(form) }}
+    {{ form_errors(form) }}
 
-<button type="submit" class="btn btn-info my-3">Passer à l'étape suivante</button>
+    
+    {{ form_widget(form) }}
 
-{{ form_end(form) }}
+   
+    
+
+    {{ form_start(formCustomer) }}
+
+    
+  
+    {{ form_widget(formCustomer) }}
+
+    <button type="submit" class="btn btn-info my-3">Continuer la commande</button>
+        
+    {# {% if total > 1 %}
+        <button type="submit" class="btn btn-info my-3">Continuer la commande</button>
+    {% endif %}
+
+
+    {% if total <= 1 %}
+        <button type="#" class="btn btn-success my-3">Terminer la commande</button>
+    {% endif %} #}
+
+
+        {# <button type="#" class="btn btn-success my-3">Terminer la commande</button>
+
+        <button type="#" class="btn btn-danger my-3">Supprimer la commande</button> #}
+
+    {{ form_end(formCustomer) }}
+
+    {{ form_end(form) }}
 
 </div>
 
@@ -54,6 +90,13 @@
         useLocalTimeZone: true,
     });
 
+    $('#user_customer_dateOfBirthday').datepicker({
+        format: 'dd/mm/yyyy',
+        endDate: new Date(),
+        language: 'fr',
+        autoclose: true,
+        todayHighlight: true
+    })
 </script>
         
 {% endblock %}

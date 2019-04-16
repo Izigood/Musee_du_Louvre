@@ -20,13 +20,11 @@ class CustomerController extends AbstractController
      * 
      * @return Response
      */
-    public function index(Request $request, ObjectManager $manager, OrderCustomerRepository $repo, $id)
+    public function index(Request $request, ObjectManager $manager, OrderCustomerRepository $repo1, CustomerRepository $repo2, $id)
     {
-        $order = $repo->find($id);
+        $order = $repo1->find($id);
         $numberOfTickets = $order->getNumberOfTickets();
-        $lastnameFirst = $order->getLastname();
-        $firstnameFirst = $order->getFirstname();
-  
+        $allTickets = 2;
         
         $customer = new Customer();
         
@@ -35,51 +33,47 @@ class CustomerController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
-        {
-            //$format = new \DateTime(date('m/d/Y'), new \DateTimeZone('Europe/Paris'));
+        {   
+            $customer   ->setOrderCustomer($order)
+                        ->setTicketPrice(24.00) //A modifier
+                        ->getDateOfBirthday()->setTime('00','00','00');
             
-            $orderId = $customer->setOrderCustomer($order);
-            dump($numberOfTickets);
-            // $orderCustomer = $customer->setOrderCustomer($idOrder);
-            // $orderCustomer = $customer->getOrderCustomer();
-            // dump($orderCustomer);
-            
-            $dateOfBirthday = $customer->getDateOfBirthday();
-            $birthday = $dateOfBirthday->setTime('00','00','00');
-            dump($birthday);
+            $orderId = $order->getId();
+            $allTickets += intval($repo2->findAllCustomers($orderId)); //Modifier le nom de la variable
 
-            $customer->setTicketPrice(24); // A modifier
-            $price = $customer->getTicketPrice();
-            dump($price);
-       
+            // $manager->persist($customer);
+            // $manager->flush();
 
-            $manager->persist($customer);
-            $manager->flush();
+            // $allPrices = intval($repo2->findAllPrices($orderId));
+            // dump($allPrices);
 
-            $id = $order->getId();
+            //$id = $request->get('return');
 
-            dump($customer);
+           
 
-            // for($i = 0; $i <= ($numberOfTickets - 1); $i++)
-            // {
-            //     $ticket = $i+1;
-            //     dump($ticket);
-            // }
-
+            // return $this->redirectToRoute('order',[
+            //         'id'                => $orderId,
+            //         // 'numberOfTickets'   => $numberOfTickets
+            //     ]);
 
             // return $this->redirectToRoute('customer',[
             //     'id'                => $id,
-            //     // 'numberOfTickets'   => $numberOfTickets,
-            //     // 'firstname'         => $firstnameFirst,
-            //     // 'lastname'          => $lastnameFirst
+            //     'numberOfTickets'   => $numberOfTickets
             // ]);
         }
+       
+        // $i = $request->get('ticket');
+        // $i = intval($i);
+       
+        //$i = $request->get('ticket');
+        
+       
 
         return $this->render('customer/customer.html.twig', [
             'form'              => $form->createView(),
             'numberOfTickets'   => $numberOfTickets,
-            'firstname'         => $firstnameFirst,
-            'lastname'          => $lastnameFirst
+            'ticket'            => $allTickets
+            // 'orders'            => $order
         ]);
     }
 }

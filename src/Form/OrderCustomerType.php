@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Customer;
 use App\Entity\OrderCustomer;
+use App\Form\CustomerUserType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -10,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Form\DataTransformer\FrenchToDateTimeTransformer;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class OrderCustomerType extends AbstractType
 {
@@ -60,7 +63,6 @@ class OrderCustomerType extends AbstractType
                                                         ])
 
             ->add('halfDay', CheckboxType::class, ['label' => "Demi-journée (à partir de 14 heures)", 'required' => false])
-
         ;
         
         $builder->get('dateOfVisit')->addModelTransformer($this->transformer);

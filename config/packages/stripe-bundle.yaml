@@ -1,0 +1,2 @@
+flosch_stripe:
+    stripe_api_key: "sk_test_Q7vnG2tBjRDET2XyLgBvSV3T00NCJwkf4P%" # The Stripe API key can be added as a symfony parameter

@@ -8,8 +8,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Form\DataTransformer\FrenchToDateTimeTransformer;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType; // A supprimer
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use App\Repository\CustomerRepository;
 
 class CustomerType extends AbstractType
 {
@@ -50,14 +52,18 @@ class CustomerType extends AbstractType
                                                     ])
             ->add('reducedPrice', CheckboxType::class, ['label' => "Tarif réduit", 'required' => false])
 
-            ->add('ticketPrice', IntegerType::class, ['label' => "Prix du billet",
+            ->add('ticketPrice', MoneyType::class, ['label' => "Prix du billet",
                                                        'disabled' => true ,
                                                        'attr' => [
-                                                        'placeholder' => "0,00 Euros"
+                                                        'placeholder' => "0,00 Euros" //A modifier
                                                        ],
                                                        'required' => false
+                                                    //    'query_builder'=>function (CustomerRepository $repo) use($id)
+                                                    //                     {
+                                                    //                         return $repo->getTicketPrice($id);
+                                                    //                     }
+                                                       
                                                     ])
-            // ->add('orderCustomer')
         ;
 
         $builder->get('dateOfBirthday')->addModelTransformer($this->transformer);
