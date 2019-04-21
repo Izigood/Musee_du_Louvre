@@ -52,18 +52,13 @@ class CustomerType extends AbstractType
                                                     ])
             ->add('reducedPrice', CheckboxType::class, ['label' => "Tarif réduit", 'required' => false])
 
-            ->add('ticketPrice', MoneyType::class, ['label' => "Prix du billet",
-                                                       'disabled' => true ,
-                                                       'attr' => [
-                                                        'placeholder' => "0,00 Euros" //A modifier
-                                                       ],
-                                                       'required' => false
-                                                    //    'query_builder'=>function (CustomerRepository $repo) use($id)
-                                                    //                     {
-                                                    //                         return $repo->getTicketPrice($id);
-                                                    //                     }
-                                                       
-                                                    ])
+            // ->add('ticketPrice', MoneyType::class, ['label' => "Prix du billet",
+            //                                            'disabled' => true ,
+            //                                            'attr' => [
+            //                                             'placeholder' => "0,00 Euros" //A modifier
+            //                                            ],
+            //                                            'required' => false
+            //                                         ])
         ;
 
         $builder->get('dateOfBirthday')->addModelTransformer($this->transformer);

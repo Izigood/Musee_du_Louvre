@@ -33,6 +33,8 @@ class OrderCustomer
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez saisir votre email !")
+     * @Assert\Email(message="Votre email '{{ value }}' n'est pas valide !")
      */
     private $email;
 
@@ -49,6 +51,7 @@ class OrderCustomer
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Veuillez indiquer le nombre de billets souhaités !")
      */
     private $numberOfTickets;
 

@@ -8,7 +8,6 @@ use DateTimeZone;
 use App\Service\PricesService;
 use App\Entity\Customer;
 use App\Entity\OrderCustomer;
-use App\Form\UserCustomerType;
 use App\Form\OrderCustomerType;
 use App\Repository\OrderCustomerRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +27,7 @@ class OrderCustomerController extends AbstractController
     public function index(Request $request,ObjectManager $manager, OrderCustomerRepository $repo)
     {
         $order = new OrderCustomer();
+        //$id = $order->setId(0); //A voir
         
         $form = $this->createForm(OrderCustomerType::class, $order);
 
@@ -35,12 +35,11 @@ class OrderCustomerController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
-            
             $format         = new \DateTime(date('m/d/Y'), new \DateTimeZone('Europe/Paris'));
 
             $order          ->setDateOfOrder($format)
-                            ->setOrderStatus('En cours') // A modifier
-                            ->setTotalPrice(12.00); // A modifier                
+                            ->setOrderStatus('En cours')
+                            ->setTotalPrice(0.00);           
 
             $dateOfVisit    = $order->getDateOfVisit()->setTime('00','00','00');
             $tickets        = intval($repo->findAllTicketsByDateOfVisit($dateOfVisit));
@@ -95,81 +94,27 @@ class OrderCustomerController extends AbstractController
                 }
                 else
                 {
-                    $halfDay = false; //A vérifier
+                    $halfDay = false;
                 }
             }
             $manager->persist($order);
         }
 
-        $customer = new Customer();
-        
-        $formCustomer = $this->createForm(UserCustomerType::class, $customer);
-
-        $formCustomer->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid())
-        {
-            $customer   ->setOrderCustomer($order)
-                        ->setFirstname($order->getFirstname())
-                        ->setLastname($order->getLastname())
-                        ->setTicketPrice(24) //A modifier
-                        ->getDateOfBirthday()->setTime('00','00','00');
-
-            $manager->persist($customer);
-
-            $this->addFlash(
-                'success',
-                "Vos billets sont réservés, vous pouvez poursuivre votre commande !"
-            );
-        }
         $manager->flush();
 
-        // $reduced = $customer->getReducedPrice();
-        
-        // $age = 5;
-        // $halfDay = $order->getHalfDay();
-        
+        // $this->addFlash(
+        //     'success',
+        //     "Vos billet(s) sont réservé(s) !"
+        // );
 
-        // $price = new PricesService;
-        // $prices = $price->definePrice($age, $halfDay, $reduced);
-        
+        $id = $order->getId();
 
-        
-        // dump($age);
-        // dump($halfDay);
-        // dump($reduced);
-        // dump($prices);
-
-
-
-
-        // dump($customer);
-
-        // dump($total);
-
-        // if($total <= 1)
-        // {
-        //     $info = "Commande immédiate"; //A modifier
-        //     dump($info);
-
-        //     return $this->redirectToRoute('order');
-        //     die;
-        // }
-        // else
-        // {   
-            $id = $order->getId();
-            dump($id);
-
-            return $this->redirectToRoute('customer', [
-                'id'        => $id
+        return $this->redirectToRoute('customer', [
+                'id'            => $id
             ]);
-        // }
-        
-
+       
         return $this->render('order_customer/order_customer.html.twig', [
             'form'          => $form->createView(),
-            'formCustomer'  => $formCustomer->createView()
-            // 'total'         => $total
         ]);
     }
 }

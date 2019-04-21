@@ -12,46 +12,40 @@
     {% endfor %}
 {% endfor %}
 
-<h1>Commande</h1>
-
-<hr class="my-4">
-
-<div class="container mt-3">
+<div class="container my-3">
 
     {{ form_start(form) }}
 
+    <hr class="my-4">
+        <h1>Commande</h1>
+    <hr class="my-4">
+
     {{ form_errors(form) }}
-
     
-    {{ form_widget(form) }}
-
-   
-    
-
-    {{ form_start(formCustomer) }}
-
-    
-  
-    {{ form_widget(formCustomer) }}
+    {{ form_label(form.dateOfVisit) }}
+    {{ form_widget(form.dateOfVisit) }}
+    <br />
+    {{ form_label(form.numberOfTickets) }}
+    {{ form_widget(form.numberOfTickets) }}
+    <br />
+    {{ form_label(form.halfDay) }}
+    {{ form_widget(form.halfDay) }}
+    <br />
+    <hr class="my-4">
+        <h1>Visiteur</h1>
+    <hr class="my-4">
+    {{ form_label(form.firstname) }}
+    {{ form_widget(form.firstname) }}
+    <br />
+    {{ form_label(form.lastname) }}
+    {{ form_widget(form.lastname) }}
+    <br />
+    {{ form_label(form.email) }}
+    {{ form_widget(form.email) }}
+    <br />
 
     <button type="submit" class="btn btn-info my-3">Continuer la commande</button>
         
-    {# {% if total > 1 %}
-        <button type="submit" class="btn btn-info my-3">Continuer la commande</button>
-    {% endif %}
-
-
-    {% if total <= 1 %}
-        <button type="#" class="btn btn-success my-3">Terminer la commande</button>
-    {% endif %} #}
-
-
-        {# <button type="#" class="btn btn-success my-3">Terminer la commande</button>
-
-        <button type="#" class="btn btn-danger my-3">Supprimer la commande</button> #}
-
-    {{ form_end(formCustomer) }}
-
     {{ form_end(form) }}
 
 </div>
@@ -62,6 +56,9 @@
 
 <script>
     
+    //$('span.alert.alert-danger.d-block').detach();
+    $('span.form-error-icon.badge.badge-danger.text-uppercase').text('Erreur');
+
     {# var dates = ['01/05/yyyy', '01/11/yyyy', '25/12/yyyy'];
     var year = [2019, 2020];
 

@@ -12,21 +12,15 @@
     {% endfor %}
 {% endfor %}
 
-<h1>Visiteur {{ ticket }} / {{ numberOfTickets }}</h1>
-
-<hr class="my-4">
-
 <div class="container mt-3">
 
     {{ form_start(form) }}
 
+    <hr class="my-4">
+        <h1>Billet N° : {{ ticket }} / {{ numberOfTickets }}</h1>
+    <hr class="my-4">
+
     {{ form_widget(form) }}
-
-    {# <button type="submit" class="btn btn-info my-3" name="ticket" value="1">Visiteur suivant</button>
-
-    <button type="submit" class="btn btn-warning my-3" name="return" value="return">Retour à la commande</button> #}
-
-    {# <button type="submit" class="btn btn-info my-3">Visiteur suivant</button> #}
 
     {% if ticket < numberOfTickets %}
         <button type="submit" class="btn btn-info my-3">Visiteur suivant</button>
@@ -49,6 +43,9 @@
 {% block javascripts %}
 
 <script>
+    
+    $('span.form-error-icon.badge.badge-danger.text-uppercase').text('Erreur');
+
     $('#customer_dateOfBirthday').datepicker({
         format: 'dd/mm/yyyy',
         endDate: new Date(),

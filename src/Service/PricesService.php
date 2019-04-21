@@ -2,83 +2,65 @@
 
 namespace App\Service;
 
+use Symfony\Component\Yaml\Yaml;
+
 class PricesService
 {
     private $price;
-    private $age;
+    private $ageSenior;
+    private $ageBaby;
+    private $ageChildren;
+    private $pricesSenior;
+    private $pricesBaby;
+    private $pricesChildren;
+    // private $pricesReduced;
+    // private $pricesNormal;
     
-    // public function __CONSTRUCT()
-    // {
-        
-    // }
+    public function __CONSTRUCT()
+    {
+        $value          = Yaml::parseFile(__DIR__.'/Data.yaml');
+        $this->ageSenior      = $value['data']['ages']['senior'];
+        $this->ageBaby        = $value['data']['ages']['baby'];
+        $this->ageChildren    = $value['data']['ages']['children'];
+        $this->pricesSenior   = $value['data']['prices']['senior'];
+        $this->pricesBaby     = $value['data']['prices']['baby'];
+        $this->pricesChildren = $value['data']['prices']['children'];
+        $this->pricesReduced = $value['data']['prices']['reduced'];
+        $this->pricesNormal   = $value['data']['prices']['normal'];
+        $this->coefHalfPrice  = $value['data']['coefficient']['halfprice'];
+        $this->coefNormal     = $value['data']['coefficient']['normal']; //A retirer
+    }
 
     public function definePrice($age, $halfday, $reduced)
     {
-        // if($reduced == false && $halfday == true)
-        // {
-        //     $this->price = $this->price * 0.5;
-        // }
-        
-        // elseif($reduced == true && $halfday == false)
-        // {
-        //     $this->price = $this->price - 10;
-        // }
+        switch ($age)
+            {
+                case ($age < $this->ageBaby):
+                    $this->price = $this->pricesBaby;
+                    break;
+                    case ($age >= $this->ageBaby && $age < $this->ageChildren):
+                    $this->price = $this->pricesChildren;
+                    break;
+                    case ($age >= $this->ageChildren && $age < $this->ageSenior):
+                    $this->price = $this->pricesNormal;
+                    break;
+                    case ($age >= $this->ageSenior):
+                    $this->price = $this->pricesSenior;
+                    break;
+            }
 
-        // switch ($age)
-        //     {
-        //         case ($age < 4):
-        //             $price = 0;
-        //             return $this->price;
-        //             break;
-        //             case ($age >= 4 && $age <= 12):
-        //             $this->price = 8;
-        //             return $this->price;
-        //             break;
-        //             case ($age > 12):
-        //             $this->price = 16;
-        //             return $this->price;
-        //             break;
-        //             case ($age >= 60):
-        //             $this->price = 12;
-        //             return $this->price;
-        //             break;
-        //     }
-        $this->price = 16;
-
-        if($reduced == true && $halfday == false)
+        if($reduced == false && $halfday == true || $reduced == true && $halfday == true)
         {
-            $price = $this->price * 0.5;
-            return $price;
+            $this->price = $this->price * $this->coefHalfPrice;
         }
-        elseif($reduced == false && $halfday == true)
+        elseif($reduced == true && $halfday == false && $age >= $this->ageChildren && $age < $this->ageSenior)
         {
-            $price = $this->price - 10;
-            return $price;
+            $this->price = $this->price - $this->pricesReduced;
         }
-        
-    }
-
-    public function getPrice()
-    {
+        else
+        {
+            $this->price = $this->price;
+        }
         return $this->price;
-    }
-
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    public function getAge()
-    {
-        return $this->age;
-    }
-
-    public function setAge($age)
-    {
-        $this->age = $age;
-
-        return $this;
     }
 }
