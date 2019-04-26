@@ -37,7 +37,7 @@ class Customer
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\LessThan("today")
+     * @Assert\LessThan("today", message="La date saissie n'est pas une date valide !")
      */
     private $dateOfBirthday;
 

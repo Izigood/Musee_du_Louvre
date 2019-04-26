@@ -99,9 +99,6 @@
     "fig/link-util": {
         "version": "1.0.0"
     },
-    "flosch/stripe-bundle": {
-        "version": "2.1.0"
-    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -154,7 +151,7 @@
         "version": "v1.0.0"
     },
     "stripe/stripe-php": {
-        "version": "v3.23.0"
+        "version": "v6.32.1"
     },
     "swiftmailer/swiftmailer": {
         "version": "v6.2.0"

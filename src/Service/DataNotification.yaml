@@ -1,0 +1,13 @@
+data :
+  "ages":
+    "senior"    : 60
+    "baby"      : 4
+    "children"  : 12
+  "prices":
+    "senior"    : 12.0
+    "baby"      : 0.0
+    "children"  : 8.0
+    "reduced"   : 10.0
+    "normal"    : 16.0
+  "coefficient":
+    "halfprice" : 0.5

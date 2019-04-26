@@ -30,7 +30,7 @@ class CustomerRepository extends ServiceEntityRepository
             ->where('p.orderCustomer = :val')
             ->setParameter('val', $id)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
         ;
     }
 
@@ -41,19 +41,7 @@ class CustomerRepository extends ServiceEntityRepository
             ->where('p.orderCustomer = :val')
             ->setParameter('val', $id)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
         ;
     }
-
-    /*
-    public function findOneBySomeField($value): ?Customer
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

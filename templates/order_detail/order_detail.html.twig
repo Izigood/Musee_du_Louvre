@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block header %}
+
+<div class="jumbotron">
+    <h1 class="display-4">Validez votre commande !</h1>
+    <p class="lead">Plus qu'une étape avant d'avoir le plaisir de vous accueillir...</p>
+</div>
+{% endblock %}
+
+{% block body %}
+
+{% for label, messages in app.flashes(['success', 'danger']) %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+<div class="container my-3">
+    <hr>
+        <h1>Détail et paiement de votre commande</h1>
+    <hr class="my-4">
+    <div class="containe-fluid">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                <th scope="col">Prénom</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Tarif</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for order in allOrders %}
+                <tr>
+                <td>{{ order.firstname }}</td>
+                <td>{{ order.lastname }}</td>
+                <td>{{ order.ticketPrice }} Euros TTC</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <h5 class="mt-5 mb-4">Le montant total de votre commande est de : {{ totalPrices }} euros TTC</h5>
+    <hr class="my-4">
+    <form method="post" id="payment-form">
+        <label class="mb-2" for="card-element">
+            Paiement de votre commande
+        </label>
+        <div id="card-element">
+        <!-- A Stripe Element will be inserted here. -->
+        </div>
+        <!-- Used to display form errors. -->
+        <div id="card-errors" role="alert"></div>
+         <button type="submit" class="btn btn-success my-3">Paiement</button>
+    </form> 
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="/js/app.js"></script>
+{% endblock %}

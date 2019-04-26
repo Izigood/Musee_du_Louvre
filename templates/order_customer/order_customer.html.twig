@@ -2,6 +2,13 @@
 
 {% block title %}{% endblock %}
 
+{% block header %}
+<div class="jumbotron">
+    <h1 class="display-4">Réservez votre billet en ligne !</h1>
+    <p class="lead">Cela vous permettra d'éviter les longues files d'attente...</p>
+</div>
+{% endblock %}
+
 {% block body %}
 
 {% for label, messages in app.flashes(['success', 'danger']) %}
@@ -13,69 +20,60 @@
 {% endfor %}
 
 <div class="container my-3">
-
-    {{ form_start(form) }}
-
-    <hr class="my-4">
-        <h1>Commande</h1>
-    <hr class="my-4">
-
-    {{ form_errors(form) }}
-    
-    {{ form_label(form.dateOfVisit) }}
-    {{ form_widget(form.dateOfVisit) }}
-    <br />
-    {{ form_label(form.numberOfTickets) }}
-    {{ form_widget(form.numberOfTickets) }}
-    <br />
-    {{ form_label(form.halfDay) }}
-    {{ form_widget(form.halfDay) }}
-    <br />
-    <hr class="my-4">
-        <h1>Visiteur</h1>
-    <hr class="my-4">
-    {{ form_label(form.firstname) }}
-    {{ form_widget(form.firstname) }}
-    <br />
-    {{ form_label(form.lastname) }}
-    {{ form_widget(form.lastname) }}
-    <br />
-    {{ form_label(form.email) }}
-    {{ form_widget(form.email) }}
-    <br />
-
-    <button type="submit" class="btn btn-info my-3">Continuer la commande</button>
-        
-    {{ form_end(form) }}
-
-</div>
-
+            {{ form_start(form) }}
+                <hr>
+                    <h1>Commande</h1>
+                <hr class="my-4">
+                <br />
+                {{ form_errors(form) }}
+                {{ form_label(form.dateOfVisit) }}
+                {{ form_widget(form.dateOfVisit) }}
+                <br />
+                {{ form_label(form.numberOfTickets) }}
+                {{ form_widget(form.numberOfTickets) }}
+                <br />
+                {{ form_label(form.halfDay) }}
+                {{ form_widget(form.halfDay) }}
+                <br />
+                <hr class="my-4">
+                    <h1>Visiteur</h1>
+                <hr class="my-4">
+                {{ form_label(form.firstname) }}
+                {{ form_widget(form.firstname) }}
+                <br />
+                {{ form_label(form.lastname) }}
+                {{ form_widget(form.lastname) }}
+                <br />
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email) }}
+                <br />
+                <button type="submit" class="btn btn-info mt-3 mb-4">Continuer votre commande</button>
+            {{ form_end(form) }}
+            <br />
+        </div>
 {% endblock %}
 
 {% block javascripts %}
+<script type="text/javascript">
+    var dateOne                 = new Date('05-01-2019');
+    var yearOfReferenceOne      = dateOne.getFullYear();
+    var CurrentDateOne          = '01/05/' + yearOfReferenceOne;
+    var yearOne                 = '01/05/' + (yearOfReferenceOne + 1);
 
-<script>
-    
-    //$('span.alert.alert-danger.d-block').detach();
-    $('span.form-error-icon.badge.badge-danger.text-uppercase').text('Erreur');
+    var dateTwo                 = new Date('11-01-2019');
+    var yearOfReferenceTwo      = dateTwo.getFullYear();
+    var CurrentDateTwo          = '01/11/' + yearOfReferenceTwo;
+    var yearTwo                 = '01/11/' + (yearOfReferenceTwo + 1);
 
-    {# var dates = ['01/05/yyyy', '01/11/yyyy', '25/12/yyyy'];
-    var year = [2019, 2020];
+    var dateThree               = new Date('12-25-2019')
+    var yearOfReferenceThree    = dateThree.getFullYear();
+    var CurrentDateThree        = '25/12/' + yearOfReferenceThree;
+    var yearThree               = '25/12/' + (yearOfReferenceThree + 1);
 
-    var data= year[1].toString();
-    var result = [data];
-
-    var date1 = dates[0].replace('yyyy', result[0]);
-    var date2 = dates[1].replace('yyyy', result[0]);
-    var date3 = dates[2].replace('yyyy', result[0]);
-    var allDates = [date1, date2, date3];
-    console.log(allDates);
-
-    var datesDisabled = allDates; #}
-    //console.log(datesDisabled);
-
-    var datesDisabled = ['01/05/2019', '01/11/2019', '25/12/2019'];
-    
+    var datesDisabled = [
+        CurrentDateOne, yearOne, CurrentDateTwo, yearTwo, CurrentDateThree, yearThree
+    ];
+            
     $('#order_customer_dateOfVisit').datepicker({
         format: 'dd/mm/yyyy',
         daysOfWeekDisabled: [2, 0],
@@ -93,7 +91,6 @@
         language: 'fr',
         autoclose: true,
         todayHighlight: true
-    })
+    });
 </script>
-        
 {% endblock %}

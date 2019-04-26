@@ -13,22 +13,22 @@ class PricesService
     private $pricesSenior;
     private $pricesBaby;
     private $pricesChildren;
-    // private $pricesReduced;
-    // private $pricesNormal;
+    private $pricesReduced;
+    private $pricesNormal;
+    private $coefHalfPrice;
     
     public function __CONSTRUCT()
     {
-        $value          = Yaml::parseFile(__DIR__.'/Data.yaml');
+        $value          = Yaml::parseFile(__DIR__.'/DataNotification.yaml');
         $this->ageSenior      = $value['data']['ages']['senior'];
         $this->ageBaby        = $value['data']['ages']['baby'];
         $this->ageChildren    = $value['data']['ages']['children'];
         $this->pricesSenior   = $value['data']['prices']['senior'];
         $this->pricesBaby     = $value['data']['prices']['baby'];
         $this->pricesChildren = $value['data']['prices']['children'];
-        $this->pricesReduced = $value['data']['prices']['reduced'];
+        $this->pricesReduced  = $value['data']['prices']['reduced'];
         $this->pricesNormal   = $value['data']['prices']['normal'];
         $this->coefHalfPrice  = $value['data']['coefficient']['halfprice'];
-        $this->coefNormal     = $value['data']['coefficient']['normal']; //A retirer
     }
 
     public function definePrice($age, $halfday, $reduced)
@@ -53,7 +53,7 @@ class PricesService
         {
             $this->price = $this->price * $this->coefHalfPrice;
         }
-        elseif($reduced == true && $halfday == false && $age >= $this->ageChildren && $age < $this->ageSenior)
+        elseif($reduced == true && $halfday == false && $age >= $this->ageChildren)
         {
             $this->price = $this->price - $this->pricesReduced;
         }

@@ -2,25 +2,21 @@
 <html lang="fr">
 <html>
     <head>
-    
         {% include 'common/head.html.twig' %}
-
     </head>
     <body>
-
         {% include 'common/navbar.html.twig' %}
-        
         <div class="container mt-3">
-            {% include 'common/header.html.twig' %}
-            {% block body %}{% endblock %}
-        </div>
+        {% block header %}{% endblock %}
         
+        {% block body %}{% endblock %}
+        </div>
         <script src='/js/jquery.min.js'></script>
         <script src='/js/popper.min.js'></script>
         <script src='/js/bootstrap.min.js'></script>
         <script src="/js/bootstrap-datepicker.min.js"></script>
-
-        <script>
+        <script src="https://js.stripe.com/v3/"></script>
+        <script type="text/javascript">
             (function($){
                 $.fn.datepicker.dates['fr'] = {
                     days: ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"],
@@ -36,7 +32,7 @@
                 };
             }(jQuery));
         </script>
-
         {% block javascripts %}{% endblock %}
+        {% include 'common/footer.html.twig' %}
     </body>
 </html>

@@ -2,6 +2,13 @@
 
 {% block title %}{% endblock %}
 
+{% block header %}
+<div class="jumbotron">
+    <h1 class="display-4">Dites-nous avec qui venez-vous ?</h1>
+    <p class="lead">Maintenant, vous pouvez remplir vos billets pour chacune des personnes qui vous accompagnera...</p>
+</div>
+{% endblock %}
+
 {% block body %}
 
 {% for label, messages in app.flashes(['success', 'danger']) %}
@@ -13,61 +20,71 @@
 {% endfor %}
 
 <div class="container mt-3">
-
     {{ form_start(form) }}
-
     <hr class="my-4">
         <h1>Billet N° : {{ ticket }} / {{ numberOfTickets }}</h1>
     <hr class="my-4">
-
-    {{ form_widget(form) }}
-
+    <br />
+    {{ form_errors(form) }}
+    {{ form_label(form.firstname) }}
+    {{ form_widget(form.firstname) }}
+    <br />
+    {{ form_label(form.lastname) }}
+    {{ form_widget(form.lastname) }}
+    <br />
+    {{ form_label(form.country) }}
+    {{ form_widget(form.country) }}
+    <br />
+    {{ form_label(form.dateOfBirthday) }}
+    {{ form_widget(form.dateOfBirthday) }}
+    <br />
+    {{ form_label(form.reducedPrice) }}
+    {{ form_widget(form.reducedPrice) }}
+    <div id="mention" class='response my-3 text-warning' style='display: none'>
+        <p><em>Il sera nécessaire de présenter votre carte étudiant, militaire ou équivalent lors de votre entrée au musée !</em></p>
+    </div>
+    <br />
     {% if ticket < numberOfTickets %}
         <button type="submit" class="btn btn-info my-3">Visiteur suivant</button>
     {% endif %}
 
     {% if ticket == numberOfTickets %}
-        <button type="#" class="btn btn-success my-3">Terminer la commande</button>
+        <button type="sumit" class="btn btn-success my-3">Terminer la commande</button>
     {% endif %}
-
     {{ form_end(form) }}
-
-    <div class='response my-3 text-warning' style='display: none'>
-        <p><em>Il sera nécessaire de présenter votre carte étudiant, militaire ou équivalent lors de votre entrée au musée !</em></p>
-    </div>
-
 </div>
-
 {% endblock %}
 
 {% block javascripts %}
-
-<script>
-    
-    $('span.form-error-icon.badge.badge-danger.text-uppercase').text('Erreur');
-
+<script type="text/javascript">
     $('#customer_dateOfBirthday').datepicker({
         format: 'dd/mm/yyyy',
         endDate: new Date(),
         language: 'fr',
         autoclose: true,
         todayHighlight: true
-    })
+    });
 </script>
 
-<script>
-    
-    
-    //$(function(){
-        //$(":checkbox").on('click', function(){
-            //$('.form-check').after(response)
-        //}); 
-    //});
-    
-    //$(":checkbox").click(function(){
-        //$('.form-check').after(response)
-    //});
+<script type="text/javascript">
+    var reset = [
+        "customer_firstname",
+        "customer_lastname",
+        "customer_country",
+        "customer_dateOfBirthday",
+    ];
+    for (var i = 0; i < reset.length; i++) {
+        document.getElementById(reset[i]).value = "";
+    }
+    document.getElementById("customer_reducedPrice").checked = false;
+ </script>
 
+<script type="text/javascript">
+    function showDetails(checkbox){
+        if (checkbox.checked){
+            document.getElementById("mention").style.display="block";
+        }
+        else document.getElementById("mention").style.display="none";
+        }
 </script>
-
 {% endblock %}

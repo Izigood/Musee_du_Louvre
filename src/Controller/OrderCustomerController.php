@@ -27,7 +27,6 @@ class OrderCustomerController extends AbstractController
     public function index(Request $request,ObjectManager $manager, OrderCustomerRepository $repo)
     {
         $order = new OrderCustomer();
-        //$id = $order->setId(0); //A voir
         
         $form = $this->createForm(OrderCustomerType::class, $order);
 
@@ -39,7 +38,13 @@ class OrderCustomerController extends AbstractController
 
             $order          ->setDateOfOrder($format)
                             ->setOrderStatus('En cours')
-                            ->setTotalPrice(0.00);           
+                            ->setTotalPrice(0.00);
+                            
+            $securityFirstname = strip_tags(ucfirst($order->getFirstname()));
+            $filterFirstname = $order->setFirstname($securityFirstname);
+            
+            $securityLastname = strip_tags(strtoupper($order->getLastname()));
+            $filterLastname = $order->setLastname($securityLastname);
 
             $dateOfVisit    = $order->getDateOfVisit()->setTime('00','00','00');
             $tickets        = intval($repo->findAllTicketsByDateOfVisit($dateOfVisit));
@@ -52,69 +57,71 @@ class OrderCustomerController extends AbstractController
                     return $this->redirectToRoute('order', [
                         $this->addFlash(
                             'warning',
-                            "Désolé, il n'est plus possible de commander de billets"
+                            "Désolé, il n'est plus possible de commander de billets !"
                         )
                     ]);
                     break;
             }
-
-            // if($totalTickets <= 1000)
-            // {
-            //     $rest = 1000 - $totalTickets;
-            //     $message = "Nous pouvons vous proposer ". $rest ." billets de disponibles"; // A modifier
-            // }
-
-            // $halfDay = $order->getHalfDay();
-            // $dateOfDay = $format;
             
-            $timeGap = $dateOfVisit->diff($format);
-            $startDate = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
-            $interval = new DateInterval('P1D');
-            
-            if($timeGap == $interval)
+            $timeGap        = $format->diff($dateOfVisit);
+            $startDate      = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+            $interval       = new DateInterval('P1D');
+
+            if($timeGap->d < $interval->d)
             {
-                $info = $startDate->format('H');
+                $time = $startDate->format('H');
 
-                // if($info >= 18 )
-                // {
-                //     $this->addFlash(
-                //         'danger',
-                //         "Oups, il est trop tard pour commander aujourd'hui !"
-                //     );
-                //     return $this->redirectToRoute('order');
-                //     die;
-                // }
-                if($info >= 14)
+                if($time >= 18 )
+                {
+                    $this->addFlash(
+                        'danger',
+                        "Oups, il est trop tard pour commander aujourd'hui !"
+                    );
+                    return $this->redirectToRoute('order');
+                    die;
+                }
+                if($time >= 14)
                 {
                     $halfDay = $order->setHalfDay(true);
                     $this->addFlash(
                         'success',
-                        "Billet(s) commandé(s) pour la demi-journée !"
+                        "Votre visite est prévue pour la demi-journée !"
                     );
                 }
-                else
+            }
+            else
+            {
+                $halfDay = $order->getHalfDay();
+
+                if($halfDay == true)
                 {
-                    $halfDay = false;
+                    $this->addFlash(
+                        'success',
+                        "Votre visite est prévue pour la demi-journée !"
+                    );
                 }
             }
+
             $manager->persist($order);
         }
-
         $manager->flush();
-
-        // $this->addFlash(
-        //     'success',
-        //     "Vos billet(s) sont réservé(s) !"
-        // );
 
         $id = $order->getId();
 
-        return $this->redirectToRoute('customer', [
+        if(isset($id))
+        {
+            $this->addFlash(
+                        'success',
+                        "Vos billets sont réservés. Ravis de vous compter parmis nous !"
+                    );
+
+            return $this->redirectToRoute('customer', [
                 'id'            => $id
             ]);
-       
+        }
+
         return $this->render('order_customer/order_customer.html.twig', [
-            'form'          => $form->createView(),
+            'form'          => $form->createView()
         ]);
     }
 }

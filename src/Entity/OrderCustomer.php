@@ -40,7 +40,7 @@ class OrderCustomer
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\GreaterThan("today")
+     * @Assert\GreaterThan("today", message="La date saissie n'est pas une date valide !")
      */
     private $dateOfVisit;
 

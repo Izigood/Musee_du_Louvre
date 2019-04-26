@@ -30,7 +30,7 @@ class OrderCustomerRepository extends ServiceEntityRepository
             ->where('p.dateOfVisit = :val')
             ->setParameter('val', $visit)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
         ;
     }
     
@@ -41,36 +41,19 @@ class OrderCustomerRepository extends ServiceEntityRepository
             ->where('p.id = :val')
             ->setParameter('val', $id)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
         ;
     }
 
-    // /**
-    //  * @return OrderCustomer[] Returns an array of OrderCustomer objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findId()
     {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('o.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('p')
+            
+            ->select('p.id')
+            ->orderBy('p.id', 'DESC')
+            ->setMaxResults(1)
             ->getQuery()
-            ->getResult()
+            ->getSingleScalarResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?OrderCustomer
-    {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
