@@ -69,7 +69,7 @@ class CustomerController extends AbstractController
                 
                 $this->addFlash(
                     'success',
-                    "Votre billet au nom de $securityFirstname $securityLastname est bien enregistré !" //A modfier
+                    "Votre billet au nom de $securityFirstname $securityLastname est bien enregistré !"
                 );
             }
 
@@ -85,7 +85,7 @@ class CustomerController extends AbstractController
             {   
                 $this->addFlash(
                     'success',
-                    "Nous sommes heureux de vous confimer l'enregistrement de tous vos billets !" //A modifier
+                    "Nous sommes heureux de vous confimer l'enregistrement de tous vos billets !"
                 );
                     
                 return $this->redirectToRoute('verification',[
