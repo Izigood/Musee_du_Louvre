@@ -4,15 +4,16 @@ namespace Tests\AppBundle\Entity;
 
 use App\Service\PricesService;
 use PHPUnit\Framework\TestCase;
+use App\Controller\OrderCustomerController;
 
 class PricesServiceTest extends TestCase
 {
     public function testPrice1()
     {
         $price = new PricesService;
-        $result = $price->definePrice('60', true, false);
+        $result = $price->definePrice('24', false, false);
 
-        $this->assertSame(6.0, $result);
+        $this->assertSame(16.0, $result);
     }
 
     public function testPrice2()
@@ -26,9 +27,9 @@ class PricesServiceTest extends TestCase
     public function testPrice3()
     {
         $price = new PricesService;
-        $result = $price->definePrice('3', true, true);
+        $result = $price->definePrice('60', true, false);
 
-        $this->assertSame(0.0, $result);
+        $this->assertSame(6.0, $result);
     }
 
     public function testPrice4()
@@ -37,5 +38,13 @@ class PricesServiceTest extends TestCase
         $result = $price->definePrice('9', true, true);
 
         $this->assertSame(4.0, $result);
+    }
+
+    public function testPrice5()
+    {
+        $price = new PricesService;
+        $result = $price->definePrice('3', true, true);
+
+        $this->assertSame(0.0, $result);
     }
 }
