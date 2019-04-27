@@ -27,7 +27,7 @@ class UserNotification
 
     public function notify($dateOfOrder, $codeFinal, $allOrders, $totalPrices, $userEmail)
     {
-        $message = (new \Swift_Message('Validation de votre commande - Musée du Louvre'))
+        $message = (new \Swift_Message('Votre billet - Musée du Louvre'))
             ->setFrom('noreply@server.com')
             ->setTo($userEmail)
             ->setReplyTo($userEmail);

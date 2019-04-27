@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block header %}
+<div class="jumbotron">
+  <h1 class="display-4">Désolé, nous rencontrons des problèmes de connexion !</h1>
+  <button type="button" class="btn btn-info my-3" OnClick="window.location.href='{{ path('order')}}'">Retour sur site !</button>
+</div>
+{% endblock %}
+
+{% block body %}{% endblock %}
+
