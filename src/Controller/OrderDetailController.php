@@ -58,7 +58,6 @@ class OrderDetailController extends AbstractController
             {
                 \Stripe\Stripe::setApiKey("sk_test_Q7vnG2tBjRDET2XyLgBvSV3T00NCJwkf4P");
 
-                $token = null; //A voir
                 $token = $_POST['stripeToken'];
                 $charge = \Stripe\Charge::create([
                     'amount' => $amountForStripe,
