@@ -56,15 +56,32 @@ class OrderDetailController extends AbstractController
 
             if(isset($_POST['stripeToken']))
             {
-                \Stripe\Stripe::setApiKey("sk_test_Q7vnG2tBjRDET2XyLgBvSV3T00NCJwkf4P");
+                try{
+                    \Stripe\Stripe::setApiKey("sk_test_Q7vnG2tBjRDET2XyLgBvSV3T00NCJwkf4P");
 
-                $token = $_POST['stripeToken'];
-                $charge = \Stripe\Charge::create([
-                    'amount' => $amountForStripe,
-                    'currency' => 'eur',
-                    'description' => $orderName,
-                    'source' => $token,
-                ]);
+                    $token = $_POST['stripeToken'];
+
+                    $charge = \Stripe\Charge::create([
+                        'amount' => $amountForStripe,
+                        'currency' => 'eur',
+                        'description' => $orderName,
+                        'source' => $token
+                    ]);
+                }
+
+                catch (\Stripe\Error\Card $e)
+                {
+                    if($e != null)
+                    {   
+                        return $this->redirectToRoute('verification', [
+                            'id'            => $id,
+                            $this->addFlash(
+                                'danger',
+                                "Désolé, votre commande a échouée, veuillez saisir à nouveau les numéros de votre carte bancaire !"
+                            )
+                        ]);
+                    }
+                }
                 
                 $order->setOrderStatus('Terminée');
                 $manager->persist($order);    
@@ -74,16 +91,21 @@ class OrderDetailController extends AbstractController
                 {
                     $notification->notify($dateOfOrder, $codeFinal, $allOrders, $totalPrices, $userEmail);
 
-                    $this->addFlash(
-                        'success',
-                        "Félicitations, votre commande a bien été prise en compte ! À très bientôt au Musée du Louvre :-)"
-                    );
-
-                    return $this->redirectToRoute('order');
+                    return $this->redirectToRoute('order', [
+                        $this->addFlash(
+                            'success',
+                            "Félicitations, votre commande a bien été prise en compte ! À très bientôt au Musée du Louvre :-)"
+                        )
+                    ]);
                 }   
                 if ($order->getOrderStatus() == 'En cours')
                 {
-                    return $this->redirectToRoute('error_page');
+                    return $this->redirectToRoute('error_page', [
+                        $this->addFlash(
+                            'warning',
+                            "Désolé, mais votre commande n'a pas été prise en compte !"
+                        )
+                    ]);
                 }  
             }
             return $this->render('order_detail/order_detail.html.twig', [
@@ -94,7 +116,6 @@ class OrderDetailController extends AbstractController
         else
         {
             return $this->redirectToRoute('error_page');
-                
         }
     }
 }
