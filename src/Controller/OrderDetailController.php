@@ -102,7 +102,7 @@ class OrderDetailController extends AbstractController
                 {
                     return $this->redirectToRoute('error_page', [
                         $this->addFlash(
-                            'warning',
+                            'danger',
                             "Désolé, mais votre commande n'a pas été prise en compte !"
                         )
                     ]);

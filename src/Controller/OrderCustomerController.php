@@ -51,12 +51,14 @@ class OrderCustomerController extends AbstractController
             $total          = intval($order->getNumberOfTickets());
             $totalTickets   = $tickets + $total;
 
+            $info = $order->getNumberOfTickets();
+
             switch ($totalTickets)
             {
                 case ($totalTickets > 1000):
                     return $this->redirectToRoute('order', [
                         $this->addFlash(
-                            'warning',
+                            'danger',
                             "Désolé, il n'est plus possible de commander de billets !"
                         )
                     ]);
